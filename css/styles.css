@@ -24,4 +24,6 @@ body {
     color: black;
     font-size: 22px;
     font-weight: bold;
+
+    transition: width 1s ease-in-out;
 }
