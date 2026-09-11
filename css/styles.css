@@ -6,3 +6,13 @@ body {
     background-color: black;
     color: white;
 }
+
+.ball {
+    width: 100px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+
+    margin: 60px auto;
+
+    background-color: rgb(7, 229, 214);
+}
