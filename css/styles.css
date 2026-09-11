@@ -7,7 +7,12 @@ body {
     color: white;
 }
 
+
 .ball {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     width: 100px;
     aspect-ratio: 1;
     border-radius: 50%;
@@ -15,4 +20,8 @@ body {
     margin: 60px auto;
 
     background-color: rgb(7, 229, 214);
+
+    color: black;
+    font-size: 22px;
+    font-weight: bold;
 }
