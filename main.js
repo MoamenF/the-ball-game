@@ -1,6 +1,7 @@
 'use strict';
 
 var gBallDiameter = 100
+var gIntervalHover
 
 function onBallClick(maxDiameter) {
     const elBall = document.querySelector('.ball')
@@ -76,3 +77,27 @@ function onBall6Click() {
     elBall2.style.backgroundColor = 'rgb(229, 144, 7)'
     elBall2.innerText = '100'
 }
+
+const elBall6 = document.querySelector('.ball-6')
+var gHoverTimer
+
+elBall6.addEventListener('mouseenter', () => {
+    gHoverTimer = setTimeout(() => {
+        onBall6Hover()
+    }, 2000);
+})
+
+function onBall6Hover() {
+    gIntervalHover = setInterval(() => {
+        onBallClick()
+        onBall2Click()
+        onBall3Click()
+        onBall4Click()
+    }, 2000);
+}
+
+elBall6.addEventListener('mouseleave', () => {
+    clearInterval(gIntervalHover)
+    clearTimeout(gHoverTimer)
+})
+
