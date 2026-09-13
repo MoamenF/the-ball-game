@@ -57,3 +57,9 @@ function onBall4Click() {
     elBall1.style.width = `${Math.max(100, newBall1Width)}px`
     elBall2.style.width = `${Math.max(100, newBall2Width)}px`
 }
+
+function onBall5Click() {
+    const elBody = document.querySelector('body')
+
+    elBody.style.backgroundColor = getRandomColor()
+}
