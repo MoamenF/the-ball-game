@@ -42,4 +42,18 @@ function onBall3Click() {
     elBall2.style.backgroundColor = tempBall1Color
 }
 
+function onBall4Click() {
+    const elBall1 = document.querySelector('.ball')
+    const elBall2 = document.querySelector('.ball-2')
 
+    var randAmount = getRandomInt(20, 60)
+
+    const ball1Width =  parseInt(elBall1.style.width)
+    const newBall1Width = ball1Width - randAmount
+
+    const ball2Width =  parseInt(elBall2.style.width)
+    const newBall2Width = ball2Width - randAmount
+
+    elBall1.style.width = `${Math.max(100, newBall1Width)}px`
+    elBall2.style.width = `${Math.max(100, newBall2Width)}px`
+}
