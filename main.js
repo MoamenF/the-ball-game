@@ -63,3 +63,16 @@ function onBall5Click() {
 
     elBody.style.backgroundColor = getRandomColor()
 }
+
+function onBall6Click() {
+    const elBall1 = document.querySelector('.ball')
+    const elBall2 = document.querySelector('.ball-2')
+
+    elBall1.style.width = '100px'
+    elBall1.style.backgroundColor = 'rgb(7, 229, 214)'
+    elBall1.innerText = '100'
+    
+    elBall2.style.width = '100px'
+    elBall2.style.backgroundColor = 'rgb(229, 144, 7)'
+    elBall2.innerText = '100'
+}
