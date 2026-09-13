@@ -28,3 +28,18 @@ function onBall2Click(maxDiameter) {
     elBall.style.backgroundColor = getRandomColor()
 }
 
+function onBall3Click() {
+    const elBall1 = document.querySelector('.ball')
+    const elBall2 = document.querySelector('.ball-2')
+
+    var tempBall1Width =  elBall1.style.width 
+    var tempBall1Color =  elBall1.style.backgroundColor
+
+    elBall1.style.width = elBall2.style.width
+    elBall2.style.width = tempBall1Width
+
+    elBall1.style.backgroundColor =  elBall2.style.backgroundColor
+    elBall2.style.backgroundColor = tempBall1Color
+}
+
+
