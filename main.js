@@ -12,6 +12,6 @@ function onBallClick() {
 
     elBall.style.width = `${gBallDiameter}px`
     elBall.innerText = `${gBallDiameter}`
-    
+    elBall.style.backgroundColor = getRandomColor()
 }
 
