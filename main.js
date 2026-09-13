@@ -2,6 +2,7 @@
 
 var gBallDiameter = 100
 var gIntervalHover
+var gHoverTimer
 
 function onBallClick(maxDiameter) {
     const elBall = document.querySelector('.ball')
@@ -76,10 +77,11 @@ function onBall6Click() {
     elBall2.style.width = '100px'
     elBall2.style.backgroundColor = 'rgb(229, 144, 7)'
     elBall2.innerText = '100'
+
+    gBallDiameter = 100
 }
 
 const elBall6 = document.querySelector('.ball-6')
-var gHoverTimer
 
 elBall6.addEventListener('mouseenter', () => {
     gHoverTimer = setTimeout(() => {
