@@ -5,8 +5,12 @@
 body {
     background-color: black;
     color: white;
+    text-align: center;
 }
 
+.counter {
+    margin: 20px auto;
+}
 
 .ball {
     display: flex;
