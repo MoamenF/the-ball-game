@@ -1,71 +1,65 @@
 'use strict';
 
-var gBallDiameter = 100
 var gIntervalHover
 var gHoverTimer
+var gCycleCount = 0
 
 var gGameStats = {
-    ball1: {diameter: 100, color: rgb(7, 229, 214)},
-    ball2: {diameter: 100, color: rgb(229, 144, 7)}
+    ball1: {diameter: 100, color: 'rgb(7, 229, 214)'},
+    ball2: {diameter: 100, color: 'rgb(229, 144, 7)'}
 }
+
+const initStats = structuredClone(gGameStats)
 
 const gUndoStack = []
 const gRedoStack = []
 
-function onBallClick(maxDiameter) {
-    const elBall = document.querySelector('.ball')
-    
-    var randAmount = getRandomInt(20, 60)
-    gBallDiameter += randAmount
-    
-    if (gBallDiameter > maxDiameter) gBallDiameter = 100
 
-    elBall.style.width = `${gBallDiameter}px`
-    elBall.innerText = `${gBallDiameter}`
-    elBall.style.backgroundColor = getRandomColor()
+function onBallClick(maxDiameter) {
+    makeChange(() => {
+        
+        const randAmount = getRandomInt(20, 60)
+        gGameStats.ball1.diameter += randAmount
+
+        if (gGameStats.ball1.diameter > maxDiameter) gGameStats.ball1.diameter = 100
+
+        gGameStats.ball1.color = getRandomColor()
+    })
 }
 
 function onBall2Click(maxDiameter) {
-    const elBall = document.querySelector('.ball-2')
-    
-    var randAmount = getRandomInt(20, 60)
-    gBallDiameter += randAmount
-    
-    if (gBallDiameter > maxDiameter) gBallDiameter = 100
+    makeChange(() => {
+        
+        const randAmount = getRandomInt(20, 60)
+        gGameStats.ball2.diameter += randAmount
 
-    elBall.style.width = `${gBallDiameter}px`
-    elBall.innerText = `${gBallDiameter}`
-    elBall.style.backgroundColor = getRandomColor()
+        if (gGameStats.ball2.diameter > maxDiameter) gGameStats.ball2.diameter = 100
+
+        gGameStats.ball2.color = getRandomColor()
+    })
 }
 
 function onBall3Click() {
-    const elBall1 = document.querySelector('.ball')
-    const elBall2 = document.querySelector('.ball-2')
+    makeChange(() => {
+        
+        const tempBallStats = gGameStats.ball1
 
-    var tempBall1Width =  elBall1.style.width 
-    var tempBall1Color =  elBall1.style.backgroundColor
+        gGameStats.ball1 = gGameStats.ball2
+        gGameStats.ball2 = tempBallStats
 
-    elBall1.style.width = elBall2.style.width
-    elBall2.style.width = tempBall1Width
-
-    elBall1.style.backgroundColor =  elBall2.style.backgroundColor
-    elBall2.style.backgroundColor = tempBall1Color
+    })
 }
 
 function onBall4Click() {
-    const elBall1 = document.querySelector('.ball')
-    const elBall2 = document.querySelector('.ball-2')
-
-    var randAmount = getRandomInt(20, 60)
-
-    const ball1Width =  parseInt(elBall1.style.width)
-    const newBall1Width = ball1Width - randAmount
-
-    const ball2Width =  parseInt(elBall2.style.width)
-    const newBall2Width = ball2Width - randAmount
-
-    elBall1.style.width = `${Math.max(100, newBall1Width)}px`
-    elBall2.style.width = `${Math.max(100, newBall2Width)}px`
+    makeChange(() => {
+        
+        const randAmount = getRandomInt(20, 60)
+        const newBall1Diameter = gGameStats.ball1.diameter - randAmount
+        const newBall2Diameter = gGameStats.ball2.diameter - randAmount
+        
+        gGameStats.ball1.diameter = Math.max(100, newBall1Diameter)
+        gGameStats.ball2.diameter = Math.max(100, newBall2Diameter)
+    })
 }
 
 function onBall5Click() {
@@ -75,18 +69,15 @@ function onBall5Click() {
 }
 
 function onBall6Click() {
-    const elBall1 = document.querySelector('.ball')
-    const elBall2 = document.querySelector('.ball-2')
+    gGameStats = structuredClone(initStats)
 
-    elBall1.style.width = '100px'
-    elBall1.style.backgroundColor = 'rgb(7, 229, 214)'
-    elBall1.innerText = '100'
-    
-    elBall2.style.width = '100px'
-    elBall2.style.backgroundColor = 'rgb(229, 144, 7)'
-    elBall2.innerText = '100'
+    gUndoStack.length = 0
+    gRedoStack.length = 0
 
-    gBallDiameter = 100
+    const elBody = document.querySelector('body')
+    elBody.style.backgroundColor = 'black'
+
+    render()
 }
 
 const elBall6 = document.querySelector('.ball-6')
@@ -99,6 +90,12 @@ elBall6.addEventListener('mouseenter', () => {
 
 function onBall6Hover() {
     gIntervalHover = setInterval(() => {
+        gCycleCount ++
+        if (gCycleCount === 10) {
+            clearInterval(gIntervalHover)
+            clearTimeout(gHoverTimer)
+        }
+
         onBallClick()
         onBall2Click()
         onBall3Click()
@@ -121,6 +118,8 @@ function makeChange(activationFunction) {
 
     activationFunction()
     render()
+
+    console.log('gUndoStack:', gUndoStack)
 }
 
 function render() {
@@ -139,16 +138,17 @@ function render() {
 function onUndoClick() {
     if (gUndoStack.length === 0) return
 
-    gRedoStack.push(copyGameStats)
+    gRedoStack.push(copyGameStats())
     gGameStats = gUndoStack.pop()
 
     render()
+    console.log('gRedoStack:', gRedoStack)
 }
 
 function onRedoClick() {
     if (gRedoStack.length === 0) return
 
-    gUndoStack.push(copyGameStats)
+    gUndoStack.push(copyGameStats())
     gGameStats = gRedoStack.pop()
 
     render()
