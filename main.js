@@ -9,10 +9,16 @@ var gGameStats = {
     ball2: {diameter: 100, color: 'rgb(229, 144, 7)'}
 }
 
-const initStats = structuredClone(gGameStats)
+const gInitStats = structuredClone(gGameStats)
 
 const gUndoStack = []
 const gRedoStack = []
+
+
+function onInitGame() {
+    render()
+    updateHistoryButtons()
+}
 
 
 function onBallClick(maxDiameter) {
@@ -69,7 +75,7 @@ function onBall5Click() {
 }
 
 function onBall6Click() {
-    gGameStats = structuredClone(initStats)
+    gGameStats = structuredClone(gInitStats)
 
     gUndoStack.length = 0
     gRedoStack.length = 0
@@ -78,6 +84,7 @@ function onBall6Click() {
     elBody.style.backgroundColor = 'black'
 
     render()
+    updateHistoryButtons()
 }
 
 const elBall6 = document.querySelector('.ball-6')
@@ -118,6 +125,7 @@ function makeChange(activationFunction) {
 
     activationFunction()
     render()
+    updateHistoryButtons()
 
     console.log('gUndoStack:', gUndoStack)
 }
@@ -142,6 +150,7 @@ function onUndoClick() {
     gGameStats = gUndoStack.pop()
 
     render()
+    updateHistoryButtons()
     console.log('gRedoStack:', gRedoStack)
 }
 
@@ -152,4 +161,13 @@ function onRedoClick() {
     gGameStats = gRedoStack.pop()
 
     render()
+    updateHistoryButtons()
+}
+
+function updateHistoryButtons() {
+    const elUndoBtn = document.querySelector('.undo-btn')
+    const elRedoBtn = document.querySelector('.redo-btn')
+    
+    elUndoBtn.disabled = gUndoStack.length === 0
+    elRedoBtn.disabled = gRedoStack.length === 0
 }
