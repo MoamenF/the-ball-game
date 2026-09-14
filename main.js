@@ -15,6 +15,10 @@ const gInitStats = structuredClone(gGameStats)
 const gUndoStack = []
 const gRedoStack = []
 
+var gSecsPassed = 0
+var gStartTime
+var gTimeInterval = null
+
 
 function onInitGame() {
     render()
@@ -74,6 +78,7 @@ function onBall5Click() {
 
     elBody.style.backgroundColor = getRandomColor()
     updateCounter()
+    startTimer()
 }
 
 function onBall6Click() {
@@ -91,6 +96,11 @@ function onBall6Click() {
     const elCounter = document.querySelector('.counter span')
     gCounter = 0
     elCounter.innerText = 0
+
+    clearInterval(gTimeInterval)
+    gTimeInterval = null
+    var elTime = document.querySelector('.timer')
+    elTime.innerHTML = '00:00'
 }
 
 const elBall6 = document.querySelector('.ball-6')
@@ -133,6 +143,7 @@ function makeChange(activationFunction) {
     render()
     updateHistoryButtons()
     updateCounter()
+    startTimer()
 
     console.log('gUndoStack:', gUndoStack)
 }
@@ -185,4 +196,21 @@ function updateCounter() {
 
     elCounter.innerText = gCounter
 
+}
+
+function startTimer() {
+    if (gTimeInterval !== null) return
+    gStartTime = Date.now()
+
+    gTimeInterval = setInterval(() => {
+        var elapsedTime = Date.now() - gStartTime
+
+        gSecsPassed = Math.floor(elapsedTime / 1000)
+
+        var minutes = Math.floor( gSecsPassed / 60)
+        var seconds =  gSecsPassed % 60
+
+        var elTime = document.querySelector('.timer')
+        elTime.innerHTML = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+    }, 30)
 }
