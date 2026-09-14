@@ -4,6 +4,14 @@ var gBallDiameter = 100
 var gIntervalHover
 var gHoverTimer
 
+var gGameStats = {
+    ball1: {diameter: 100, color: rgb(7, 229, 214)},
+    ball2: {diameter: 100, color: rgb(229, 144, 7)}
+}
+
+const gUndoStack = []
+const gRedoStack = []
+
 function onBallClick(maxDiameter) {
     const elBall = document.querySelector('.ball')
     
@@ -103,3 +111,45 @@ elBall6.addEventListener('mouseleave', () => {
     clearTimeout(gHoverTimer)
 })
 
+function copyGameStats() {
+    return structuredClone(gGameStats)
+}
+
+function makeChange(activationFunction) {
+    gUndoStack.push(copyGameStats())
+    gRedoStack.length = 0
+
+    activationFunction()
+    render()
+}
+
+function render() {
+    const elBall1 = document.querySelector('.ball')
+    const elBall2 = document.querySelector('.ball-2')
+
+    elBall1.style.width = `${gGameStats.ball1.diameter}px`
+    elBall1.style.backgroundColor = `${gGameStats.ball1.color}`
+    elBall1.innerText = gGameStats.ball1.diameter
+
+    elBall2.style.width = `${gGameStats.ball2.diameter}px`
+    elBall2.style.backgroundColor = `${gGameStats.ball2.color}`
+    elBall2.innerText = gGameStats.ball2.diameter
+}
+
+function onUndoClick() {
+    if (gUndoStack.length === 0) return
+
+    gRedoStack.push(copyGameStats)
+    gGameStats = gUndoStack.pop()
+
+    render()
+}
+
+function onRedoClick() {
+    if (gRedoStack.length === 0) return
+
+    gUndoStack.push(copyGameStats)
+    gGameStats = gRedoStack.pop()
+
+    render()
+}
