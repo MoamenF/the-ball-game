@@ -3,6 +3,7 @@
 var gIntervalHover
 var gHoverTimer
 var gCycleCount = 0
+var gCounter = 0
 
 var gGameStats = {
     ball1: {diameter: 100, color: 'rgb(7, 229, 214)'},
@@ -72,6 +73,7 @@ function onBall5Click() {
     const elBody = document.querySelector('body')
 
     elBody.style.backgroundColor = getRandomColor()
+    updateCounter()
 }
 
 function onBall6Click() {
@@ -85,6 +87,10 @@ function onBall6Click() {
 
     render()
     updateHistoryButtons()
+
+    const elCounter = document.querySelector('.counter span')
+    gCounter = 0
+    elCounter.innerText = 0
 }
 
 const elBall6 = document.querySelector('.ball-6')
@@ -126,6 +132,7 @@ function makeChange(activationFunction) {
     activationFunction()
     render()
     updateHistoryButtons()
+    updateCounter()
 
     console.log('gUndoStack:', gUndoStack)
 }
@@ -170,4 +177,12 @@ function updateHistoryButtons() {
     
     elUndoBtn.disabled = gUndoStack.length === 0
     elRedoBtn.disabled = gRedoStack.length === 0
+}
+
+function updateCounter() {
+    const elCounter = document.querySelector('.counter span')
+    gCounter++
+
+    elCounter.innerText = gCounter
+
 }
